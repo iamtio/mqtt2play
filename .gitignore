@@ -13,3 +13,6 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+sfx/
+mqtt2play-server
+__debug_bin
