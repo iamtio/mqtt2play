@@ -15,3 +15,4 @@
 # vendor/
 sfx/
 __debug_bin
+.env

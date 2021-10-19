@@ -3,7 +3,10 @@ package mqtt2play
 import (
 	"context"
 	"fmt"
+	"io/fs"
 	"os"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/faiface/beep"
@@ -15,11 +18,15 @@ import (
 )
 
 func PlaySound(ctx context.Context, filepath string) error {
+	playLogger := log.WithFields(log.Fields{
+		"file": filepath,
+	})
+
 	fileType, err := GetAudioFileType(filepath)
 	if err != nil {
 		return err
 	}
-
+	playLogger.Tracef("detected filetype: %s", fileType)
 	f, err := os.Open(filepath)
 	if err != nil {
 		return err
@@ -42,6 +49,7 @@ func PlaySound(ctx context.Context, filepath string) error {
 
 	speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
 
+	playLogger.Tracef("start playing")
 	done := make(chan bool)
 	speaker.Play(beep.Seq(streamer, beep.Callback(func() {
 		done <- true
@@ -49,10 +57,10 @@ func PlaySound(ctx context.Context, filepath string) error {
 	for {
 		select {
 		case <-done:
-			log.Info("Stop playing due to end of audio")
+			playLogger.Trace("stop playing due to end of audio")
 			return nil
 		case <-ctx.Done():
-			log.Info("Stop playing due to context done")
+			playLogger.Trace("stop playing due to context canceled")
 			speaker.Close()
 			return nil
 		}
@@ -82,4 +90,22 @@ func GetAudioFileType(filepath string) (string, error) {
 		return "", err
 	}
 	return kind.Extension, nil
+}
+
+func FindSfx(directory string) []string {
+	var matched []string
+	cut := directory
+	if !strings.HasSuffix(cut, "/") {
+		cut = cut + "/"
+	}
+	filepath.Walk(directory, func(path string, info fs.FileInfo, err error) error {
+		if info.IsDir() {
+			return nil
+		}
+		if strings.HasSuffix(path, ".wav") || strings.HasSuffix(path, ".mp3") {
+			matched = append(matched, strings.TrimPrefix(path, cut))
+		}
+		return nil
+	})
+	return matched
 }
