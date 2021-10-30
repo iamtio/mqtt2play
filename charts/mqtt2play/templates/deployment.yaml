@@ -24,13 +24,6 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
-      {{- with .Values.config }}
-      env:
-      {{- range $k, $v := . }}
-        - name: {{ $k | quote }}
-          value: {{ $v | quote }}
-      {{- end }}
-      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -43,6 +36,13 @@ spec:
           #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.config }}
+          env:
+          {{- range $k, $v := . }}
+            - name: {{ $k | quote }}
+              value: {{ $v | quote }}
+          {{- end }}
+          {{- end }}            
           volumeMounts:
           - mountPath: /dev/snd
             name: snd

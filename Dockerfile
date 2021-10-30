@@ -10,4 +10,4 @@ FROM alpine:3.14
 WORKDIR /opt/mqtt2play
 RUN apk add --no-cache alsa-utils
 COPY --from=build /builddir/mqtt2play-server .
-CMD ./mqtt2play
+CMD ./mqtt2play-server

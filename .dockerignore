@@ -17,3 +17,4 @@ sfx/
 __debug_bin
 *.tar
 .env
+build-docker.sh

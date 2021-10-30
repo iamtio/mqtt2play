@@ -105,6 +105,7 @@ func subscribePlay(ctx context.Context, client mqtt.Client) mqtt.Token {
 }
 func publishAvailableSounds(client mqtt.Client) error {
 	matched := mqtt2play.FindSfx(conf.SfxDir)
+	log.Infof("Found %d sound files in %s directory", len(matched), conf.SfxDir)
 	encoded, err := json.Marshal(matched)
 	if err != nil {
 		return err

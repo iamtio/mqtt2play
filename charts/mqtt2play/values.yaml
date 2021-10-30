@@ -49,7 +49,7 @@ affinity: {}
 config: {}
 persistence:
   enabled: true
-  size: 1Gi
+  size: 1G
   # stoargeClass:
 #  MQTT2PLAY_BROKERS: mosquitto:1883
 # 

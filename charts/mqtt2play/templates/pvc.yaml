@@ -7,13 +7,12 @@ metadata:
     {{- include "mqtt2play.labels" . | nindent 4 }}
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   resources:
     requests:
       storage: {{.Values.persistence.size }}
   {{- with .Values.persistence.storageClass }}
   storageClassName: {{.}}
   {{- end }}
-  volumeMode: Filesystem
-  volumeName: pvc-a9539b16-c10c-48d4-90e5-c91ecf403493
+  # volumeMode: Filesystem
   {{- end}}

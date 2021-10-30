@@ -1,3 +1,4 @@
+# helm upgrade -i -n smarthome -f ./charts/mqtt2play.yaml m2p charts/mqtt2play
 config:
   MQTT2PLAY_BROKERS: mosquitto:1883
 persistence:
