@@ -1,0 +1,4 @@
+config:
+  MQTT2PLAY_BROKERS: mosquitto:1883
+persistence:
+  enabled: true
